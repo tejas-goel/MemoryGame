@@ -2,11 +2,15 @@ var symbols = ['bicycle', 'bicycle', 'leaf', 'leaf', 'cube', 'cube', 'anchor', '
 		opened = [],
 		match = 0,
 		steps = 0,
+		secondsTaken=0,
+		minutesTaken=0,
 		$deck = jQuery('.deck'),
 		$scoreCard = $('#score-card'),
 		$moveCount = $('.steps'),
 		$rating = $('i'),
 		$restart = $('.restart'),
+		$seconds=$('.seconds'),
+		$minutes=$('.minutes'),
 		delay = 600,
 		cardQty = symbols.length / 2,
 		rank3stars = cardQty + 2,
@@ -26,6 +30,7 @@ function shuffleCards(array) {
 }
 // Start Game
 function startGame() {
+	startTimer();
   var cards = shuffleCards(symbols);
   $deck.empty();
   match = 0;
@@ -56,11 +61,12 @@ function setRating(steps) {
 
 // Stop Game and display steps taken to complete and score of player
 function endGame(steps, score) {
+	stopTimer();
 	swal({
 		allowEscapeKey: false,
 		allowOutsideClick: false,
 		title: 'Hey well done! You have Won!',
-		text: 'With ' + steps + ' steps and ' + score + ' Stars.\n Woooooo!',
+		text: 'With ' + steps + ' steps and ' + score + ' Stars.\n Woooooo! \n Time Taken: '+ minutesTaken +' Minutes -'+secondsTaken+' Seconds/',
 		type: 'success',
 		confirmButtonColor: '#02ccba',
 		confirmButtonText: 'Play again!'
@@ -134,4 +140,19 @@ $deck.find('.card:not(".match, .open")').on('click' , function() {
   }
 });
 };
+function startTimer() {
+				var seconds = 0;
+				timer = setInterval(function() {
+					seconds ++;
+					secondsTaken=seconds%60;
+					minutesTaken=parseInt(seconds / 60);
+					$seconds.text(seconds % 60);
+					$minutes.text(parseInt(seconds / 60));
+				}, 1000);
+			}
+			
+			function stopTimer() {
+				
+				clearInterval(timer);
+		}
 startGame();
